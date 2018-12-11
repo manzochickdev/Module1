@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddEditDetail.Main2Activity">
+    <fragment
+        android:id="@+id/addFragment"
+        android:name="com.example.tuananh.module1.AddEditDetail.AddFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></fragment>
+
+</FrameLayout>
