@@ -32,14 +32,8 @@ class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapter.ViewH
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.layoutRelationshipItemBinding.setViewModel(new RelaViewModel());
-        viewHolder.layoutRelationshipItemBinding.tvOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onDataHandle.addNewRelationship();
-            }
-        });
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
+        viewHolder.layoutRelationshipItemBinding.setViewModel(new RelaViewModel(modelRelas.get(i),onDataHandle,i));
         viewHolder.layoutRelationshipItemBinding.executePendingBindings();
     }
 

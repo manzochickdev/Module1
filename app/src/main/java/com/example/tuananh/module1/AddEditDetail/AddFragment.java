@@ -38,6 +38,12 @@ public class AddFragment extends Fragment {
                 modelRelas.add(new ModelRela());
                 relationshipAdapter.notifyItemInserted(modelRelas.size()-1);
             }
+
+            @Override
+            public void cancelAddRelationship(int position) {
+                modelRelas.set(position,new ModelRela());
+                relationshipAdapter.notifyItemChanged(position);
+            }
         };
         relationshipAdapter = new RelationshipAdapter(modelRelas,getContext(),onDataHandle);
         fragmentAddBinding.layoutRelationship.rvRelationship.setAdapter(relationshipAdapter);
@@ -49,5 +55,6 @@ public class AddFragment extends Fragment {
 
     public interface OnDataHandle{
         void addNewRelationship();
+        void cancelAddRelationship(int position);
     }
 }
