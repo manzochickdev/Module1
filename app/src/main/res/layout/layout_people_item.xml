@@ -7,7 +7,8 @@
     </data>
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/people_container">
         <android.support.v7.widget.CardView
             app:cardCornerRadius="8dp"
             android:layout_margin="8dp"

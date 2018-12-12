@@ -16,9 +16,9 @@ import java.util.ArrayList;
 class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapter.ViewHolder> {
     ArrayList<ModelRela> modelRelas;
     Context context;
-    AddFragment.OnDataHandle onDataHandle;
+    OnDataHandle onDataHandle;
 
-    public RelationshipAdapter(ArrayList<ModelRela> modelRelas, Context context, AddFragment.OnDataHandle onDataHandle) {
+    public RelationshipAdapter(ArrayList<ModelRela> modelRelas, Context context, OnDataHandle onDataHandle) {
         this.modelRelas = modelRelas;
         this.context = context;
         this.onDataHandle = onDataHandle;
@@ -40,6 +40,10 @@ class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapter.ViewH
     @Override
     public int getItemCount() {
         return modelRelas.size();
+    }
+
+    ArrayList<ModelRela> getItemList(){
+        return this.modelRelas;
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {

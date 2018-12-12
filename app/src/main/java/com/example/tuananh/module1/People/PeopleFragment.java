@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tuananh.module1.DatabaseHandle;
 import com.example.tuananh.module1.Model.Model;
 import com.example.tuananh.module1.People.Adapter;
 import com.example.tuananh.module1.R;
@@ -23,10 +24,6 @@ public class PeopleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragmentPeopleBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_people, container, false);
-        ArrayList<Model> models = getData();
-        Adapter adapter = new Adapter(models,getContext());
-        fragmentPeopleBinding.rvPeople.setAdapter(adapter);
-        fragmentPeopleBinding.rvPeople.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
         fragmentPeopleBinding.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +36,15 @@ public class PeopleFragment extends Fragment {
     }
 
     private ArrayList<Model> getData() {
-        return null;
+        return DatabaseHandle.getInstance(getContext()).showPeople();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ArrayList<Model> models = getData();
+        Adapter adapter = new Adapter(models,getContext());
+        fragmentPeopleBinding.rvPeople.setAdapter(adapter);
+        fragmentPeopleBinding.rvPeople.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
     }
 }

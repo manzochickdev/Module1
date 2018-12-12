@@ -25,6 +25,16 @@ public class AddFragment extends Fragment {
         fragmentAddBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_add, container, false);
         handleInfoLayout();
         handleRelationshipLayout();
+        fragmentAddBinding.btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = fragmentAddBinding.layoutInfo.etName.getText().toString();
+                RelationshipAdapter adapter = (RelationshipAdapter) fragmentAddBinding.layoutRelationship.rvRelationship.getAdapter();
+                ArrayList<ModelRela> modelRelas = adapter.getItemList();
+                IMain2Activity iMain2Activity = (IMain2Activity) getContext();
+                iMain2Activity.onDataBack(name,modelRelas);
+            }
+        });
         return fragmentAddBinding.getRoot();
     }
 
@@ -53,8 +63,4 @@ public class AddFragment extends Fragment {
     private void handleInfoLayout() {
     }
 
-    public interface OnDataHandle{
-        void addNewRelationship();
-        void cancelAddRelationship(int position);
-    }
 }

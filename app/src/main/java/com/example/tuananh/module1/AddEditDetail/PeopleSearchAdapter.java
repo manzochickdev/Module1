@@ -17,10 +17,12 @@ import java.util.ArrayList;
 public class PeopleSearchAdapter extends RecyclerView.Adapter<PeopleSearchAdapter.ViewHolder> {
     ArrayList<Model> models;
     Context context;
+    RelaViewModel.OnDataHandle onDataHandle;
 
-    public PeopleSearchAdapter(ArrayList<Model> models, Context context) {
+    public PeopleSearchAdapter(ArrayList<Model> models, Context context,RelaViewModel.OnDataHandle onDataHandle) {
         this.models = models;
         this.context = context;
+        this.onDataHandle = onDataHandle;
     }
 
     @NonNull
@@ -31,14 +33,20 @@ public class PeopleSearchAdapter extends RecyclerView.Adapter<PeopleSearchAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
+        viewHolder.layoutPeopleCircleItemBinding.setModel(models.get(i));
+        viewHolder.layoutPeopleCircleItemBinding.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDataHandle.onDataBack(models.get(i));
+            }
+        });
         viewHolder.layoutPeopleCircleItemBinding.executePendingBindings();
     }
 
     @Override
     public int getItemCount() {
-        return 5;
-        //return models.size();
+        return models.size();
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {

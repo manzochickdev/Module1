@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".AddEditDetail.AddFragment">
+        tools:context=".AddEditDetail.EditFragment">
 
+        <!-- TODO: Update blank fragment layout -->
         <View
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="350dp"
             android:background="@color/colorAccent">
 
         </View>
@@ -31,7 +31,6 @@
                     app:layout_collapseMode="pin"
                     android:background="@android:color/transparent"/>
                 <RelativeLayout
-
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:layout_width="wrap_content"
@@ -49,28 +48,29 @@
                         />
                 </RelativeLayout>
 
+                <android.support.design.widget.TabLayout
+                    app:tabMaxWidth="0dp"
+                    android:id="@+id/detail_tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_gravity="bottom"
+                    android:background="#00000000"
+                    app:layout_collapseMode="none"
+                    app:tabGravity="fill"
+                    app:tabIndicatorColor="#fff"
+                    app:tabIndicatorHeight="2dp"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="#fff"
+                    app:tabTextColor="#fff" />
+
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
-        <android.support.v4.widget.NestedScrollView
+        <android.support.v4.view.ViewPager
             android:background="@android:color/white"
+            android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <include layout="@layout/layout_info"
-                    android:id="@+id/layoutInfo"></include>
-                <include layout="@layout/layout_relationship"
-                    android:id="@+id/layoutRelationship"></include>
-                <Button
-                    android:text="OK"
-                    android:id="@+id/btn_ok"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>

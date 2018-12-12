@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.tuananh.module1.Model.Model;
 
@@ -11,10 +12,19 @@ import java.util.ArrayList;
 
 public class DatabaseHandle extends SQLiteOpenHelper {
     private static String DB_NAME = "People.db";
+    private static DatabaseHandle databaseHandle=null;
 
     public DatabaseHandle(Context context) {
         super(context, DB_NAME, null, 1);
     }
+
+    public static DatabaseHandle getInstance(Context context){
+        if (databaseHandle==null){
+            databaseHandle = new DatabaseHandle(context);
+        }
+        return databaseHandle;
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {

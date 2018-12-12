@@ -1,51 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <android.support.v4.widget.NestedScrollView
-        android:padding="8dp"
+<layout>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+        <android.support.v4.widget.NestedScrollView
+            android:padding="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/et_name"
-                    android:hint="Name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
-                <EditText
-                    android:hint="Display Relationship"
+                android:orientation="vertical">
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </android.support.design.widget.TextInputLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_address"
-                    android:padding="4dp"
-                    android:text="Place Holder"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/et_name"
+                        android:hint="Name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_add_location_black_24dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </RelativeLayout>
-        </LinearLayout>
+                    android:layout_height="wrap_content"
+                    >
+                    <EditText
+                        android:hint="Display Relationship"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_address"
+                        android:padding="4dp"
+                        android:text="Place Holder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <ImageView
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/ic_add_location_black_24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+            </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
-</FrameLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </FrameLayout>
+</layout>

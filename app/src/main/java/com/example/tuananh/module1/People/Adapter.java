@@ -32,16 +32,20 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-
-        //viewHolder.layoutPeopleItemBinding.setModel(models.get(i));
+        viewHolder.layoutPeopleItemBinding.setModel(models.get(i));
+        viewHolder.layoutPeopleItemBinding.peopleContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IMainActivity iMainActivity = (IMainActivity) context;
+                iMainActivity.onEditListener();
+            }
+        });
         viewHolder.layoutPeopleItemBinding.executePendingBindings();
     }
 
     @Override
     public int getItemCount() {
-        //todo remove test here
-        return 5;
-        //return models.size();
+        return models.size();
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {

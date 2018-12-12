@@ -1,5 +1,7 @@
 package com.example.tuananh.module1.Model;
 
+import java.util.Calendar;
+
 public class Model {
     int id;
     String name;
@@ -18,5 +20,11 @@ public class Model {
 
     public String getName() {
         return name;
+    }
+
+    public static int createId(){
+        Calendar c = Calendar.getInstance();
+        int id = (int) c.getTimeInMillis();
+        return id;
     }
 }

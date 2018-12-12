@@ -23,10 +23,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
+                android:onClick="@{()->onDataHandle.onDataBack(relationship.get(1))}"
                 android:layout_marginLeft="4dp"
                 android:background="@drawable/curved_rect"
                 android:padding="4dp"
                 android:text="@{relationship.get(1)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:onClick="@{()->onDataHandle.onDataBack(relationship.get(2))}"
+                android:layout_marginLeft="4dp"
+                android:background="@drawable/curved_rect"
+                android:padding="4dp"
+                android:text="@{relationship.get(2)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:onClick="@{()->onDataHandle.onDataBack(relationship.get(3))}"
+                android:layout_marginLeft="4dp"
+                android:background="@drawable/curved_rect"
+                android:padding="4dp"
+                android:text="@{relationship.get(3)}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
