@@ -61,6 +61,7 @@ public class AddFragment extends Fragment {
     }
 
     private void handleInfoLayout() {
+        fragmentAddBinding.layoutInfo.setIsEdit(true);
     }
 
 }

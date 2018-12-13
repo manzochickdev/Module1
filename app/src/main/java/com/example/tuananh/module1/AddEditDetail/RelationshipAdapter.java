@@ -46,6 +46,14 @@ class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapter.ViewH
         return this.modelRelas;
     }
 
+    void setIsEdit(Boolean b){
+        if (b){
+            modelRelas.add(new ModelRela());
+        }
+        else modelRelas.remove(modelRelas.size()-1);
+        notifyDataSetChanged();
+    }
+
     protected class ViewHolder extends RecyclerView.ViewHolder {
         LayoutRelationshipItemBinding layoutRelationshipItemBinding;
         public ViewHolder(@NonNull View itemView) {

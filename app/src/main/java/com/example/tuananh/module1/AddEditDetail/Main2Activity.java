@@ -19,15 +19,33 @@ public class Main2Activity extends AppCompatActivity implements IMain2Activity {
         setContentView(R.layout.activity_main2);
 
         String mode = getIntent().getStringExtra("mode");
+        //todo remove test here
+        mode="addOld";
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (mode.equals("add")){
             AddFragment addFragment = new AddFragment();
             fragmentTransaction.replace(R.id.container,addFragment,"AddFragment");
         }
-        else {
+        else if (mode.equals("addNew")){
+            Bundle bundle = new Bundle();
+            bundle.putInt("id",getIntent().getIntExtra("id",-1));
+            AddFragment addFragment = new AddFragment();
+            addFragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.container,addFragment,"AddFragment");
+        }
+        else if (mode.equals("edit")) {
             int id = getIntent().getIntExtra("id",-1);
             Bundle bundle = new Bundle();
             bundle.putInt("id",id);
+            EditFragment editFragment = new EditFragment();
+            editFragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.container,editFragment,"EditFragment");
+        }
+        else{
+            int id = getIntent().getIntExtra("id",-1);
+            Bundle bundle = new Bundle();
+            bundle.putInt("id",id);
+            bundle.putBoolean("isEdit",true);
             EditFragment editFragment = new EditFragment();
             editFragment.setArguments(bundle);
             fragmentTransaction.replace(R.id.container,editFragment,"EditFragment");

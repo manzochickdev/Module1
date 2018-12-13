@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"></import>
+        <variable
+            name="visible"
+            type="Boolean"></variable>
+    </data>
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".AddEditDetail.EditFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-        <View
+        <RelativeLayout
+            android:background="@color/colorAccent"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:background="@color/colorAccent">
-
-        </View>
+            android:layout_height="350dp">
+            <TextView
+                android:visibility="@{!visible ? View.VISIBLE : View.GONE}"
+                android:text="Cancel"
+                android:id="@+id/tvCancel"
+                android:layout_margin="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="250dp"
@@ -25,11 +37,14 @@
                 app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
                 <android.support.v7.widget.Toolbar
+                    android:visibility="@{visible ? View.VISIBLE : View.GONE}"
+                    android:id="@+id/toolbar"
                     app:elevation="0dp"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     app:layout_collapseMode="pin"
-                    android:background="@android:color/transparent"/>
+                    android:background="@android:color/transparent">
+                </android.support.v7.widget.Toolbar>
                 <RelativeLayout
                     android:layout_gravity="center"
                     android:gravity="center"

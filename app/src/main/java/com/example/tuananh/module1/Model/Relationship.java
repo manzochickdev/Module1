@@ -27,11 +27,11 @@ public class Relationship {
     public static String convertIntRelationship(int i){
         switch (i){
             case 0 :
-                return relationship[0];
+                return relationship[1];
             case 1 :
                 return relationship[2];
             case 2:
-                return relationship[1];
+                return relationship[0];
 
             default : return null;
         }
