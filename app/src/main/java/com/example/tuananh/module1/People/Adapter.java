@@ -31,13 +31,13 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         viewHolder.layoutPeopleItemBinding.setModel(models.get(i));
         viewHolder.layoutPeopleItemBinding.peopleContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 IMainActivity iMainActivity = (IMainActivity) context;
-                iMainActivity.onEditListener();
+                iMainActivity.onEditListener(models.get(i).getId());
             }
         });
         viewHolder.layoutPeopleItemBinding.executePendingBindings();

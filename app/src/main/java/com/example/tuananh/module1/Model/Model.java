@@ -1,5 +1,6 @@
 package com.example.tuananh.module1.Model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 public class Model {

@@ -6,7 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.tuananh.module1.AddEditDetail.ModelRela;
 import com.example.tuananh.module1.Model.Model;
+import com.example.tuananh.module1.Model.Relationship;
 
 import java.util.ArrayList;
 
@@ -103,22 +105,22 @@ public class DatabaseHandle extends SQLiteOpenHelper {
         else return null;
     }
 
-//    public ArrayList<ModelRela> getAllRelative(int id){
-//        ArrayList<ModelRela> modelRelas = new ArrayList<>();
-//        SQLiteDatabase db = getReadableDatabase();
-//        String q = "select * from relative where main_id = "+id+";";
-//        Cursor c = db.rawQuery(q,null);
-//        while(c.moveToNext()){
-//            int mId = c.getInt(c.getColumnIndex("id"));
-//            String mName = c.getString(c.getColumnIndex("name"));
-//            int rela = c.getInt(c.getColumnIndex("rela"));
-//            modelRelas.add(new ModelRela(new Model(mId,mName), Relationship.convertIntRelationship(rela)));
-//        }
-//        if (modelRelas.size()>0){
-//            return modelRelas;
-//        }
-//        else return null;
-//    }
+    public ArrayList<ModelRela> getAllRelative(int id){
+        ArrayList<ModelRela> modelRelas = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String q = "select * from relative where main_id = "+id+";";
+        Cursor c = db.rawQuery(q,null);
+        while(c.moveToNext()){
+            int mId = c.getInt(c.getColumnIndex("id"));
+            String mName = c.getString(c.getColumnIndex("name"));
+            int rela = c.getInt(c.getColumnIndex("rela"));
+            modelRelas.add(new ModelRela(Relationship.convertIntRelationship(rela),new Model(mId,mName)));
+        }
+        if (modelRelas.size()>0){
+            return modelRelas;
+        }
+        else return null;
+    }
 //
 //    public void addAddress(int id,ModelAddress address){
 //        String q = "insert into address values ("+id+","+address.latLng.latitude+","+address.latLng.longitude+",'"+address.address+"');";

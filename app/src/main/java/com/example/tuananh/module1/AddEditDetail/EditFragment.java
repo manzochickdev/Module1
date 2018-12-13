@@ -13,21 +13,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tuananh.module1.DatabaseHandle;
 import com.example.tuananh.module1.R;
 import com.example.tuananh.module1.databinding.FragmentEditBinding;
+import com.example.tuananh.module1.databinding.LayoutInfoBinding;
 import com.example.tuananh.module1.databinding.LayoutRelationshipBinding;
 
 import java.util.ArrayList;
 
 public class EditFragment extends Fragment {
     FragmentEditBinding fragmentEditBinding;
+    int id;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        id = bundle.getInt("id");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragmentEditBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_edit, container, false);
-        CustomPagerAdapter customPagerAdapter = new CustomPagerAdapter(getContext());
+        CustomPagerAdapter customPagerAdapter = new CustomPagerAdapter(getContext(),id);
         fragmentEditBinding.viewpager.setAdapter(customPagerAdapter);
         fragmentEditBinding.detailTabs.setupWithViewPager(fragmentEditBinding.viewpager);
         return fragmentEditBinding.getRoot();
@@ -35,9 +45,11 @@ public class EditFragment extends Fragment {
 
     protected class CustomPagerAdapter extends PagerAdapter{
         Context context;
+        int id;
 
-        public CustomPagerAdapter(Context context) {
+        public CustomPagerAdapter(Context context,int id) {
             this.context = context;
+            this.id = id;
         }
 
         @Override
@@ -70,12 +82,19 @@ public class EditFragment extends Fragment {
         }
 
         private void handleLayoutInfo(View view) {
+            LayoutInfoBinding layoutInfoBinding = DataBindingUtil.bind(view);
+            String name = DatabaseHandle.getInstance(context).getName(id);
+            layoutInfoBinding.etName.setText(name);
         }
 
         RelationshipAdapter relationshipAdapter;
+        ArrayList<ModelRela> modelRelas;
         private void handleLayoutRelationship(View view) {
             LayoutRelationshipBinding layoutRelationship = DataBindingUtil.bind(view);
-            final ArrayList<ModelRela> modelRelas = new ArrayList<>();
+            modelRelas = DatabaseHandle.getInstance(context).getAllRelative(id);
+            if (modelRelas==null){
+                modelRelas = new ArrayList<>();
+            }
             modelRelas.add(new ModelRela());
             OnDataHandle onDataHandle = new OnDataHandle() {
                 @Override

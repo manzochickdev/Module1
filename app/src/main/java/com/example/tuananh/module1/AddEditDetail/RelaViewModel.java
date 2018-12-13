@@ -63,7 +63,9 @@ public class RelaViewModel extends BaseObservable {
     void handleMode(){
         if (this.modelRela.model !=null && this.modelRela.relationship !=null){
             this.mode=2;
+            this.isVisible = true;
             notifyPropertyChanged(BR.mode);
+            notifyPropertyChanged(BR.visible);
         }
     }
 
@@ -112,8 +114,10 @@ public class RelaViewModel extends BaseObservable {
             onDataHandle.cancelAddRelationship(position);
         }
         else if (mode==1){
-            //todo handle ok click -> check model!=null || relationship != null
-            onDataHandle.addNewRelationship();
+            if (modelRela.relationship!=null && modelRela.model!=null){
+                onDataHandle.addNewRelationship();
+            }
+            else onDataHandle.cancelAddRelationship(position);
         }
     }
 
