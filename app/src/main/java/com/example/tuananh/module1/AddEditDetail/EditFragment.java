@@ -5,6 +5,7 @@ import android.databinding.BaseObservable;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tuananh.module1.DatabaseHandle;
+import com.example.tuananh.module1.Model.Model;
+import com.example.tuananh.module1.Model.Relationship;
 import com.example.tuananh.module1.R;
 import com.example.tuananh.module1.databinding.FragmentEditBinding;
 import com.example.tuananh.module1.databinding.LayoutInfoBinding;
@@ -53,6 +56,7 @@ public class EditFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragmentEditBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_edit, container, false);
+        final IMain2Activity iMain2Activity = (IMain2Activity) context;
         fragmentEditBinding.viewpager.setAdapter(customPagerAdapter);
         fragmentEditBinding.detailTabs.setupWithViewPager(fragmentEditBinding.viewpager);
 
@@ -74,7 +78,6 @@ public class EditFragment extends Fragment {
                     case R.id.miDelete:
                         //todo handle delete
                         DatabaseHandle.getInstance(context).removePerson(id);
-                        IMain2Activity iMain2Activity = (IMain2Activity) context;
                         iMain2Activity.onBackListener();
                         return true;
 
@@ -87,33 +90,14 @@ public class EditFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 handleMode(false);
+                customPagerAdapter.handleCancel();
             }
         });
         fragmentEditBinding.tvOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo handle OK
-                Integer[] a1 = new Integer[]{1,2,3,4,5};
-                ArrayList<Integer> a = new ArrayList<>(Arrays.asList(a1));
-                Integer[]b1=new Integer[]{1,3,5,6,7};
-                ArrayList<Integer> b = new ArrayList<>(Arrays.asList(b1));
-                int m=0;
-                int n=0;
-                while (m<a.size()){
-                    n=0;
-                    while (n<b.size()){
-                        int a2 = a.get(m);
-                        int b2 = b.get(n);
-                        if (a.get(m) == b.get(n)){
-                            a.remove(m);
-
-                            b.remove(n);
-                        }
-                        else n++;
-                    }
-                    m++;
-                }
-                Log.d("OK", "onClick: ");
+                iMain2Activity.onBackListener();
+                customPagerAdapter.handleUpdate();
             }
         });
         return fragmentEditBinding.getRoot();
@@ -139,12 +123,19 @@ public class EditFragment extends Fragment {
         View layoutInfo;
         View layoutRelationship;
         Boolean isEdit;
+        ArrayList<ModelRela> input;
+        DatabaseHandle databaseHandle;
 
 
         public CustomPagerAdapter(Context context,int id,Boolean isEdit) {
             this.context = context;
             this.id = id;
             this.isEdit = isEdit;
+            databaseHandle = DatabaseHandle.getInstance(context);
+            input = databaseHandle.getAllRelative(id);
+            if (input==null){
+                input = new ArrayList<>();
+            }
         }
 
         @Override
@@ -179,7 +170,7 @@ public class EditFragment extends Fragment {
         private void handleLayoutInfo(View view) {
             LayoutInfoBinding layoutInfoBinding = DataBindingUtil.bind(view);
             layoutInfoBinding.setIsEdit(isEdit);
-            String name = DatabaseHandle.getInstance(context).getName(id);
+            String name = databaseHandle.getName(id);
             layoutInfoBinding.etName.setText(name);
         }
 
@@ -187,7 +178,8 @@ public class EditFragment extends Fragment {
         ArrayList<ModelRela> modelRelas;
         private void handleLayoutRelationship(View view) {
             LayoutRelationshipBinding layoutRelationship = DataBindingUtil.bind(view);
-            modelRelas = DatabaseHandle.getInstance(context).getAllRelative(id);
+            modelRelas = new ArrayList<>();
+            modelRelas.addAll(input);
             if (modelRelas==null){
                 modelRelas = new ArrayList<>();
             }
@@ -216,7 +208,7 @@ public class EditFragment extends Fragment {
                     }
                     modelRelas.remove(pos);
                     relationshipAdapter.notifyItemRemoved(pos);
-                    DatabaseHandle.getInstance(context).removeRelative(id,position);
+                    //databaseHandle.removeRelative(id,position);
                 }
             };
             relationshipAdapter = new RelationshipAdapter(modelRelas,context,onDataHandle);
@@ -247,6 +239,40 @@ public class EditFragment extends Fragment {
                     default:return null;
             }
 
+        }
+
+        public void handleUpdate(){
+            LayoutInfoBinding layoutInfoBinding = DataBindingUtil.bind(layoutInfo);
+            //todo handle info update here
+            String name = layoutInfoBinding.etName.getText().toString();
+
+            LayoutRelationshipBinding layoutRelationshipBinding = DataBindingUtil.bind(layoutRelationship);
+            RelationshipAdapter relationshipAdapter = (RelationshipAdapter) layoutRelationshipBinding.rvRelationship.getAdapter();
+            ArrayList<ModelRela> output = relationshipAdapter.getItemList();
+            ArrayList<ModelRela> temp = new ArrayList<>();
+            for (int m=0;m<input.size();m++){
+                for (int n=0;n<output.size();n++){
+                    if(input.get(m).model.getId()==output.get(n).model.getId()){
+                        temp.add(input.get(m));
+                    }
+                }
+            }
+
+            input.removeAll(temp);
+            output.removeAll(temp);
+
+            for (int i=0;i<input.size();i++){
+                databaseHandle.removeRelative(id,input.get(i).model.getId());
+            }
+
+            Model model = databaseHandle.getPerson(id);
+            for (int i=0;i<output.size();i++){
+                databaseHandle.addRelative(model,output.get(i).model, Relationship.convertRelationship(output.get(i).relationship));
+            }
+        }
+
+        public void handleCancel(){
+            handleLayoutRelationship(layoutRelationship);
         }
     }
 

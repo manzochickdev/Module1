@@ -15,12 +15,14 @@ import java.util.ArrayList;
 
 class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapter.ViewHolder> {
     ArrayList<ModelRela> modelRelas;
+    ArrayList<ModelRela> root;
     Context context;
     OnDataHandle onDataHandle;
     Boolean isEdit=false;
 
     public RelationshipAdapter(ArrayList<ModelRela> modelRelas, Context context, OnDataHandle onDataHandle) {
         this.modelRelas = modelRelas;
+        this.root = modelRelas;
         this.context = context;
         this.onDataHandle = onDataHandle;
     }
@@ -44,7 +46,17 @@ class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapter.ViewH
     }
 
     ArrayList<ModelRela> getItemList(){
-        return this.modelRelas;
+        ArrayList<ModelRela> temp = new ArrayList<>();
+        for (ModelRela m : modelRelas){
+            if (m.model!=null && m.relationship!=null){
+                temp.add(m);
+            }
+        }
+        return temp;
+    }
+
+    void setItemList(ArrayList<ModelRela> a){
+        this.modelRelas = a;
     }
 
     void setIsEdit(Boolean b){
