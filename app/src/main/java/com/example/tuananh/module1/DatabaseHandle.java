@@ -167,4 +167,32 @@ public class DatabaseHandle extends SQLiteOpenHelper {
         }
         return null;
     }
+
+    public Model getPerson(int id){
+        SQLiteDatabase db = getReadableDatabase();
+        String q = "select * from people where id="+id+";";
+        Cursor c = db.rawQuery(q,null);
+        while (c.moveToNext()){
+            int mId = c.getInt(c.getColumnIndex("id"));
+            String mName = c.getString(c.getColumnIndex("name"));
+            return new Model(mId,mName);
+        }
+        return null;
+    }
+
+    public void removeRelative(int id1,int id2){
+        SQLiteDatabase db = getWritableDatabase();
+        String q = "delete from relative where (main_id = "+id1+" and id="+id2+");";
+        String q1 = "delete from relative where (main_id = "+id2+" and id="+id1+");";
+        db.execSQL(q);
+        db.execSQL(q1);
+    }
+
+    public void removePerson(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        String q = "delete from people where (id="+id+");";
+        String q1 = "delete from relative where (main_id = "+id+" or id="+id+");";
+        db.execSQL(q);
+        db.execSQL(q1);
+    }
 }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -25,13 +26,16 @@ import com.example.tuananh.module1.databinding.FragmentEditBinding;
 import com.example.tuananh.module1.databinding.LayoutInfoBinding;
 import com.example.tuananh.module1.databinding.LayoutRelationshipBinding;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EditFragment extends Fragment {
     FragmentEditBinding fragmentEditBinding;
     int id;
     boolean isEdit;
     CustomPagerAdapter customPagerAdapter;
+    Context context;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +44,8 @@ public class EditFragment extends Fragment {
         Bundle bundle = this.getArguments();
         id = bundle.getInt("id");
         isEdit = bundle.getBoolean("isEdit",false);
-        customPagerAdapter = new CustomPagerAdapter(getContext(),id);
+        context = getContext();
+        customPagerAdapter = new CustomPagerAdapter(context,id,isEdit);
     }
 
     @Override
@@ -50,6 +55,14 @@ public class EditFragment extends Fragment {
         fragmentEditBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_edit, container, false);
         fragmentEditBinding.viewpager.setAdapter(customPagerAdapter);
         fragmentEditBinding.detailTabs.setupWithViewPager(fragmentEditBinding.viewpager);
+
+        if (isEdit){
+            fragmentEditBinding.detailTabs.getTabAt(1).select();
+            fragmentEditBinding.setVisible(false);
+        }
+        else fragmentEditBinding.setVisible(true);
+
+
         fragmentEditBinding.toolbar.inflateMenu(R.menu.menu);
         fragmentEditBinding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -60,6 +73,9 @@ public class EditFragment extends Fragment {
                         return true;
                     case R.id.miDelete:
                         //todo handle delete
+                        DatabaseHandle.getInstance(context).removePerson(id);
+                        IMain2Activity iMain2Activity = (IMain2Activity) context;
+                        iMain2Activity.onBackListener();
                         return true;
 
                     default: return EditFragment.super.onOptionsItemSelected(menuItem);
@@ -73,19 +89,36 @@ public class EditFragment extends Fragment {
                 handleMode(false);
             }
         });
+        fragmentEditBinding.tvOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo handle OK
+                Integer[] a1 = new Integer[]{1,2,3,4,5};
+                ArrayList<Integer> a = new ArrayList<>(Arrays.asList(a1));
+                Integer[]b1=new Integer[]{1,3,5,6,7};
+                ArrayList<Integer> b = new ArrayList<>(Arrays.asList(b1));
+                int m=0;
+                int n=0;
+                while (m<a.size()){
+                    n=0;
+                    while (n<b.size()){
+                        int a2 = a.get(m);
+                        int b2 = b.get(n);
+                        if (a.get(m) == b.get(n)){
+                            a.remove(m);
+
+                            b.remove(n);
+                        }
+                        else n++;
+                    }
+                    m++;
+                }
+                Log.d("OK", "onClick: ");
+            }
+        });
         return fragmentEditBinding.getRoot();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (isEdit){
-            //todo handle error here
-            //fragmentEditBinding.detailTabs.getTabAt(1).select();
-            handleMode(true);
-        }
-        else fragmentEditBinding.setVisible(true);
-    }
 
     private void handleMode(boolean b) {
         View view = (View) customPagerAdapter.onViewBack(1);
@@ -103,15 +136,15 @@ public class EditFragment extends Fragment {
     protected class CustomPagerAdapter extends PagerAdapter{
         Context context;
         int id;
-        LayoutInflater layoutInflater;
         View layoutInfo;
         View layoutRelationship;
+        Boolean isEdit;
 
 
-        public CustomPagerAdapter(Context context,int id) {
+        public CustomPagerAdapter(Context context,int id,Boolean isEdit) {
             this.context = context;
             this.id = id;
-            layoutInflater = LayoutInflater.from(context);
+            this.isEdit = isEdit;
         }
 
         @Override
@@ -127,6 +160,7 @@ public class EditFragment extends Fragment {
         @NonNull
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            LayoutInflater layoutInflater = LayoutInflater.from(context);
             switch (position){
                 case 0:
                     layoutInfo = layoutInflater.inflate(R.layout.layout_info,container,false);
@@ -144,7 +178,7 @@ public class EditFragment extends Fragment {
 
         private void handleLayoutInfo(View view) {
             LayoutInfoBinding layoutInfoBinding = DataBindingUtil.bind(view);
-            layoutInfoBinding.setIsEdit(false);
+            layoutInfoBinding.setIsEdit(isEdit);
             String name = DatabaseHandle.getInstance(context).getName(id);
             layoutInfoBinding.etName.setText(name);
         }
@@ -169,10 +203,25 @@ public class EditFragment extends Fragment {
                     modelRelas.set(position,new ModelRela());
                     relationshipAdapter.notifyItemChanged(position);
                 }
+
+                @Override
+                public void onRemove(int position) {
+                    int pos =-1;
+                    for (ModelRela m : modelRelas){
+                        if (m.model!=null&&m.relationship!=null){
+                            if (m.model.getId()==position){
+                                pos = modelRelas.indexOf(m);
+                            }
+                        }
+                    }
+                    modelRelas.remove(pos);
+                    relationshipAdapter.notifyItemRemoved(pos);
+                    DatabaseHandle.getInstance(context).removeRelative(id,position);
+                }
             };
-            relationshipAdapter = new RelationshipAdapter(modelRelas,getContext(),onDataHandle);
+            relationshipAdapter = new RelationshipAdapter(modelRelas,context,onDataHandle);
             layoutRelationship.rvRelationship.setAdapter(relationshipAdapter);
-            layoutRelationship.rvRelationship.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+            layoutRelationship.rvRelationship.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
         }
 
         @Override

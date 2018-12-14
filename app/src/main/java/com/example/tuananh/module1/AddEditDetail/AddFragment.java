@@ -4,12 +4,16 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tuananh.module1.DatabaseHandle;
+import com.example.tuananh.module1.Model.Model;
 import com.example.tuananh.module1.R;
 import com.example.tuananh.module1.databinding.FragmentAddBinding;
 
@@ -18,6 +22,17 @@ import java.util.ArrayList;
 
 public class AddFragment extends Fragment {
     FragmentAddBinding fragmentAddBinding;
+    int id;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        if (bundle!=null){
+            id = bundle.getInt("id");
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,7 +56,11 @@ public class AddFragment extends Fragment {
     RelationshipAdapter relationshipAdapter;
     private void handleRelationshipLayout() {
         final ArrayList<ModelRela> modelRelas = new ArrayList<>();
-        modelRelas.add(new ModelRela());
+        if (id!=-1){
+            Model model = DatabaseHandle.getInstance(getContext()).getPerson(id);
+            modelRelas.add(new ModelRela(model));
+        }
+        else modelRelas.add(new ModelRela());
         OnDataHandle onDataHandle = new OnDataHandle() {
             @Override
             public void addNewRelationship() {
@@ -53,6 +72,20 @@ public class AddFragment extends Fragment {
             public void cancelAddRelationship(int position) {
                 modelRelas.set(position,new ModelRela());
                 relationshipAdapter.notifyItemChanged(position);
+            }
+
+            @Override
+            public void onRemove(int position) {
+                int pos =-1;
+                for (ModelRela m : modelRelas){
+                    if (m.model!=null&&m.relationship!=null){
+                        if (m.model.getId()==position){
+                            pos = modelRelas.indexOf(m);
+                        }
+                    }
+                }
+                modelRelas.remove(pos);
+                relationshipAdapter.notifyItemRemoved(pos);
             }
         };
         relationshipAdapter = new RelationshipAdapter(modelRelas,getContext(),onDataHandle);

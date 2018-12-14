@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
     @Override
     public void onEditListener(int id) {
         Intent intent = new Intent(this, Main2Activity.class);
-        intent.putExtra("mode","edit");
+        intent.putExtra("mode","view");
         intent.putExtra("id",id);
         startActivity(intent);
     }

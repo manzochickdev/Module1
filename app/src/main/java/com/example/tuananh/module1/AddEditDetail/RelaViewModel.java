@@ -32,14 +32,16 @@ public class RelaViewModel extends BaseObservable {
     int mode=-1;
     Boolean isVisible=false;
     int position;
+    Boolean isEdit;
     OnDataHandle onHandler;
     com.example.tuananh.module1.AddEditDetail.OnDataHandle onDataHandle;
     ModelRela modelRela;
 
-    public RelaViewModel(ModelRela modelRela, com.example.tuananh.module1.AddEditDetail.OnDataHandle onDataHandle, int position) {
+    public RelaViewModel(ModelRela modelRela, com.example.tuananh.module1.AddEditDetail.OnDataHandle onDataHandle, int position,Boolean isEdit) {
         this.modelRela = modelRela;
         this.onDataHandle = onDataHandle;
         this.position = position;
+        this.isEdit = isEdit;
         setInterface();
         handleMode();
     }
@@ -61,16 +63,25 @@ public class RelaViewModel extends BaseObservable {
     }
 
     void handleMode(){
-        if (this.modelRela.model !=null && this.modelRela.relationship !=null){
-            this.mode=2;
+        if (this.modelRela.model !=null){
+            if (this.modelRela.relationship!=null){
+                this.mode=2;
+                notifyPropertyChanged(BR.mode);
+            }
             this.isVisible = true;
-            notifyPropertyChanged(BR.mode);
             notifyPropertyChanged(BR.visible);
         }
     }
 
     public OnDataHandle getOnHandler() {
         return onHandler;
+    }
+    @Bindable
+    public Boolean getEdit() {
+        if (this.modelRela.model !=null && this.modelRela.relationship!=null){
+            return isEdit;
+        }
+        else return false;
     }
 
     @Bindable
@@ -115,10 +126,16 @@ public class RelaViewModel extends BaseObservable {
         }
         else if (mode==1){
             if (modelRela.relationship!=null && modelRela.model!=null){
+                isEdit = true;
+                notifyPropertyChanged(BR.edit);
                 onDataHandle.addNewRelationship();
             }
             else onDataHandle.cancelAddRelationship(position);
         }
+    }
+
+    public void handleRemove(){
+        onDataHandle.onRemove(modelRela.model.getId());
     }
 
     public interface OnDataHandle{

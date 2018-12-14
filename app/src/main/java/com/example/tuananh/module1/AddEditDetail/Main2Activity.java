@@ -19,8 +19,6 @@ public class Main2Activity extends AppCompatActivity implements IMain2Activity {
         setContentView(R.layout.activity_main2);
 
         String mode = getIntent().getStringExtra("mode");
-        //todo remove test here
-        mode="addOld";
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (mode.equals("add")){
             AddFragment addFragment = new AddFragment();
@@ -33,7 +31,7 @@ public class Main2Activity extends AppCompatActivity implements IMain2Activity {
             addFragment.setArguments(bundle);
             fragmentTransaction.replace(R.id.container,addFragment,"AddFragment");
         }
-        else if (mode.equals("edit")) {
+        else if (mode.equals("view")) {
             int id = getIntent().getIntExtra("id",-1);
             Bundle bundle = new Bundle();
             bundle.putInt("id",id);
@@ -42,6 +40,7 @@ public class Main2Activity extends AppCompatActivity implements IMain2Activity {
             fragmentTransaction.replace(R.id.container,editFragment,"EditFragment");
         }
         else{
+            //"addExisting"
             int id = getIntent().getIntExtra("id",-1);
             Bundle bundle = new Bundle();
             bundle.putInt("id",id);
@@ -66,6 +65,11 @@ public class Main2Activity extends AppCompatActivity implements IMain2Activity {
                 }
             }
         }
+        onBackPressed();
+    }
+
+    @Override
+    public void onBackListener() {
         onBackPressed();
     }
 }
