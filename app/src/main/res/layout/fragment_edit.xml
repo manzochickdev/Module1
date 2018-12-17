@@ -3,6 +3,9 @@
     <data>
         <import type="android.view.View"></import>
         <variable
+            name="id"
+            type="Integer"></variable>
+        <variable
             name="visible"
             type="Boolean"></variable>
     </data>
@@ -65,7 +68,7 @@
                         android:scaleType="centerCrop"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@mipmap/ic_launcher"
+                        setProfileImage="@{id}"
                         app:civ_border_width="2dp"
                         app:civ_border_color="#FFFFFF"
                         />

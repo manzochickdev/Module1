@@ -1,14 +1,22 @@
 package com.example.tuananh.module1.AddEditDetail;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.tuananh.module1.DatabaseHandle;
 import com.example.tuananh.module1.Model.Model;
 import com.example.tuananh.module1.Model.Relationship;
 import com.example.tuananh.module1.R;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main2Activity extends AppCompatActivity implements IMain2Activity {
@@ -53,7 +61,7 @@ public class Main2Activity extends AppCompatActivity implements IMain2Activity {
     }
 
     @Override
-    public void onDataBack(String name, ArrayList<ModelRela> modelRela) {
+    public void onDataBack(String name, ArrayList<ModelRela> modelRela,Bitmap bitmap) {
         if (name!=null && !name.equals("")){
             Model model = new Model(Model.createId(),name);
             DatabaseHandle.getInstance(getBaseContext()).addPeople(model);
@@ -64,12 +72,64 @@ public class Main2Activity extends AppCompatActivity implements IMain2Activity {
                     }
                 }
             }
+            if (bitmap!=null){
+                saveBitmap(model.getId(),bitmap);
+            }
         }
         onBackPressed();
+    }
+
+    @Override
+    public void saveBitmap(int id,Bitmap bitmap) {
+        String name = Integer.toString(id);
+        Context context = getBaseContext();
+        File file = new File(context.getFilesDir(),name);
+        FileOutputStream fileOutputStream;
+        try {
+            fileOutputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
+            bitmap.compress(Bitmap.CompressFormat.PNG,100,fileOutputStream);
+            fileOutputStream.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onBackListener() {
         onBackPressed();
     }
+
+    @Override
+    public void onImageBack(Bitmap bitmap, int mode) {
+        if (mode==0){
+            AddFragment addFragment = (AddFragment) getSupportFragmentManager().findFragmentByTag("AddFragment");
+            addFragment.setImage(bitmap);
+        }
+        else {
+            EditFragment editFragment = (EditFragment) getSupportFragmentManager().findFragmentByTag("EditFragment");
+            editFragment.setImage(bitmap);
+        }
+    }
+
+    @Override
+    public void reload(int id, Boolean isEdit) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("id",id);
+        bundle.putBoolean("isEdit",isEdit);
+        EditFragment editFragment = new EditFragment();
+        editFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,editFragment,"EditFragment").commit();
+    }
+
+    @Override
+    public void handleDelete(int id) {
+        String name = Integer.toString(id);
+        DatabaseHandle.getInstance(getBaseContext()).removePerson(id);
+        getBaseContext().deleteFile(name);
+        onBackPressed();
+    }
+
 }

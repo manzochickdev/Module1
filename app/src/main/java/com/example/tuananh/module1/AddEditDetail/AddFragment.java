@@ -2,9 +2,12 @@ package com.example.tuananh.module1.AddEditDetail;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 public class AddFragment extends Fragment {
     FragmentAddBinding fragmentAddBinding;
     int id;
+    Boolean isImageProfileChange = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,17 +44,47 @@ public class AddFragment extends Fragment {
         fragmentAddBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_add, container, false);
         handleInfoLayout();
         handleRelationshipLayout();
-        fragmentAddBinding.btnOk.setOnClickListener(new View.OnClickListener() {
+        fragmentAddBinding.tvOk.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 String name = fragmentAddBinding.layoutInfo.etName.getText().toString();
                 RelationshipAdapter adapter = (RelationshipAdapter) fragmentAddBinding.layoutRelationship.rvRelationship.getAdapter();
                 ArrayList<ModelRela> modelRelas = adapter.getItemList();
+                Bitmap bitmap = null;
+                if (isImageProfileChange){
+                    bitmap =((BitmapDrawable) fragmentAddBinding.ivProfile.getDrawable()).getBitmap();
+                }
                 IMain2Activity iMain2Activity = (IMain2Activity) getContext();
-                iMain2Activity.onDataBack(name,modelRelas);
+                iMain2Activity.onDataBack(name,modelRelas,bitmap);
             }
         });
+        fragmentAddBinding.ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("mode",0);
+                ImagePickerFragment imagePickerFragment = new ImagePickerFragment();
+                imagePickerFragment.setArguments(bundle);
+                imagePickerFragment.show(getFragmentManager(),imagePickerFragment.getTag());
+
+            }
+        });
+//        fragmentAddBinding.btnOk.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String name = fragmentAddBinding.layoutInfo.etName.getText().toString();
+//                RelationshipAdapter adapter = (RelationshipAdapter) fragmentAddBinding.layoutRelationship.rvRelationship.getAdapter();
+//                ArrayList<ModelRela> modelRelas = adapter.getItemList();
+//                IMain2Activity iMain2Activity = (IMain2Activity) getContext();
+//                iMain2Activity.onDataBack(name,modelRelas);
+//            }
+//        });
         return fragmentAddBinding.getRoot();
+    }
+
+    void setImage(Bitmap image){
+        fragmentAddBinding.ivProfile.setImageBitmap(image);
+        isImageProfileChange = true;
     }
 
     RelationshipAdapter relationshipAdapter;

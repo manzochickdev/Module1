@@ -11,23 +11,25 @@
     </data>
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp">
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@drawable/curved_rect">
                 <LinearLayout
                     android:visibility="@{viewModel.visible ? View.VISIBLE : View.GONE}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="4dp">
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="4dp">
+                        android:layout_height="wrap_content">
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:clickable="@{viewModel.mode!=2}"
                             android:onClick="@{()->viewModel.onModeChange(1)}"
@@ -38,6 +40,7 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp" />
                         <TextView
+                            android:layout_centerVertical="true"
                             android:text="@{viewModel.modelRela.model.name}"
                             android:id="@+id/tv_name"
                             android:layout_toLeftOf="@id/iv_profile"
@@ -50,8 +53,9 @@
                             android:layout_marginLeft="28dp"
                             android:layout_centerVertical="true"
                             android:padding="4dp"
-                            android:background="@drawable/curved_rect"
-                            android:text="@{viewModel.modelRela.relationship}"
+                            android:textColor="@android:color/white"
+                            android:background="@drawable/curved_accent"
+                            android:text="@{viewModel.modelRela.relationship != null ? viewModel.modelRela.relationship : @string/relationshipHolder}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                         <ImageView
@@ -73,7 +77,7 @@
                         android:visibility="@{viewModel.mode!=2 ? View.VISIBLE : View.GONE}"
                         android:layout_gravity="right"
                         android:layout_marginTop="8dp"
-                        android:layout_marginRight="12dp"
+                        android:layout_marginRight="20dp"
                         android:layout_alignParentRight="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -93,11 +97,16 @@
                             android:layout_height="wrap_content" />
                     </LinearLayout>
                 </LinearLayout>
-                <Button
+                <TextView
                     android:onClick="@{()->viewModel.addModelRela()}"
                     android:visibility="@{!viewModel.visible ? View.VISIBLE : View.GONE}"
                     android:id="@+id/btn_add"
-                    android:text="Add More"
+                    android:layout_margin="4dp"
+                    android:textSize="18sp"
+                    android:padding="8dp"
+                    android:gravity="center"
+                    android:textColor="@color/colorAccent"
+                    android:text="+ Add Relative"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>

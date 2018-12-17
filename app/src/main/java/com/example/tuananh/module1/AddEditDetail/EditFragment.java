@@ -3,6 +3,8 @@ package com.example.tuananh.module1.AddEditDetail;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -39,6 +41,7 @@ public class EditFragment extends Fragment {
     boolean isEdit;
     CustomPagerAdapter customPagerAdapter;
     Context context;
+    Boolean isImageProfileChange = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class EditFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragmentEditBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_edit, container, false);
+        fragmentEditBinding.setId(id);
         final IMain2Activity iMain2Activity = (IMain2Activity) context;
         fragmentEditBinding.viewpager.setAdapter(customPagerAdapter);
         fragmentEditBinding.detailTabs.setupWithViewPager(fragmentEditBinding.viewpager);
@@ -63,8 +67,12 @@ public class EditFragment extends Fragment {
         if (isEdit){
             fragmentEditBinding.detailTabs.getTabAt(1).select();
             fragmentEditBinding.setVisible(false);
+            fragmentEditBinding.ivProfile.setEnabled(true);
         }
-        else fragmentEditBinding.setVisible(true);
+        else {
+            fragmentEditBinding.setVisible(true);
+            fragmentEditBinding.ivProfile.setEnabled(false);
+        }
 
 
         fragmentEditBinding.toolbar.inflateMenu(R.menu.menu);
@@ -76,9 +84,7 @@ public class EditFragment extends Fragment {
                         handleMode(true);
                         return true;
                     case R.id.miDelete:
-                        //todo handle delete
-                        DatabaseHandle.getInstance(context).removePerson(id);
-                        iMain2Activity.onBackListener();
+                        iMain2Activity.handleDelete(id);
                         return true;
 
                     default: return EditFragment.super.onOptionsItemSelected(menuItem);
@@ -89,8 +95,7 @@ public class EditFragment extends Fragment {
         fragmentEditBinding.tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                handleMode(false);
-                customPagerAdapter.handleCancel();
+                iMain2Activity.reload(id,isEdit);
             }
         });
         fragmentEditBinding.tvOk.setOnClickListener(new View.OnClickListener() {
@@ -98,13 +103,34 @@ public class EditFragment extends Fragment {
             public void onClick(View v) {
                 iMain2Activity.onBackListener();
                 customPagerAdapter.handleUpdate();
+                if (isImageProfileChange){
+                    Bitmap bitmap =((BitmapDrawable) fragmentEditBinding.ivProfile.getDrawable()).getBitmap();
+                    iMain2Activity.saveBitmap(id,bitmap);
+                }
+            }
+        });
+
+        fragmentEditBinding.ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("mode",1);
+                ImagePickerFragment imagePickerFragment = new ImagePickerFragment();
+                imagePickerFragment.setArguments(bundle);
+                imagePickerFragment.show(getFragmentManager(),imagePickerFragment.getTag());
             }
         });
         return fragmentEditBinding.getRoot();
     }
 
+    void setImage(Bitmap image){
+        fragmentEditBinding.ivProfile.setImageBitmap(image);
+        isImageProfileChange = true;
+    }
+
 
     private void handleMode(boolean b) {
+        fragmentEditBinding.ivProfile.setEnabled(b);
         View view = (View) customPagerAdapter.onViewBack(1);
         LayoutRelationshipBinding layoutRelationship = DataBindingUtil.bind(view);
         RelationshipAdapter relationshipAdapter = (RelationshipAdapter) layoutRelationship.rvRelationship.getAdapter();
@@ -269,10 +295,8 @@ public class EditFragment extends Fragment {
             for (int i=0;i<output.size();i++){
                 databaseHandle.addRelative(model,output.get(i).model, Relationship.convertRelationship(output.get(i).relationship));
             }
-        }
 
-        public void handleCancel(){
-            handleLayoutRelationship(layoutRelationship);
+
         }
     }
 

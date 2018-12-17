@@ -12,15 +12,18 @@ import com.example.tuananh.module1.Model.Model;
 import com.example.tuananh.module1.R;
 import com.example.tuananh.module1.databinding.LayoutPeopleItemBinding;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-    ArrayList<Model> models;
+    ArrayList<ArrayList<Model>> list;
     Context context;
+    IMainActivity iMainActivity;
 
     public Adapter(ArrayList<Model> models, Context context) {
-        this.models = models;
         this.context = context;
+        list = handleList(models);
+        iMainActivity = (IMainActivity) context;
     }
 
     @NonNull
@@ -32,20 +35,51 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
-        viewHolder.layoutPeopleItemBinding.setModel(models.get(i));
-        viewHolder.layoutPeopleItemBinding.peopleContainer.setOnClickListener(new View.OnClickListener() {
+        viewHolder.layoutPeopleItemBinding.setModels(list.get(i));
+        View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                IMainActivity iMainActivity = (IMainActivity) context;
-                iMainActivity.onEditListener(models.get(i).getId());
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.container :
+                        iMainActivity.onEditListener(list.get(i).get(0).getId());
+                        break;
+                    case R.id.container1:
+                        iMainActivity.onEditListener(list.get(i).get(1).getId());
+                        break;
+                    case R.id.container2:
+                        iMainActivity.onEditListener(list.get(i).get(2).getId());
+                        break;
+                }
             }
-        });
+        };
+        viewHolder.layoutPeopleItemBinding.container.setOnClickListener(onClickListener);
+        viewHolder.layoutPeopleItemBinding.container1.setOnClickListener(onClickListener);
+        viewHolder.layoutPeopleItemBinding.container2.setOnClickListener(onClickListener);
+//        viewHolder.layoutPeopleItemBinding.setModel(models.get(i));
+//        viewHolder.layoutPeopleItemBinding.peopleContainer.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                IMainActivity iMainActivity = (IMainActivity) context;
+//                iMainActivity.onEditListener(models.get(i).getId());
+//            }
+//        });
         viewHolder.layoutPeopleItemBinding.executePendingBindings();
     }
 
     @Override
     public int getItemCount() {
-        return models.size();
+        return list.size();
+    }
+
+    ArrayList<ArrayList<Model>> handleList(ArrayList<Model> models){
+        ArrayList<ArrayList<Model>> lists = new ArrayList<>();
+        while(models.size()>=3){
+            ArrayList<Model> temp = new ArrayList<>(models.subList(0,3));
+            lists.add(temp);
+            models.removeAll(temp);
+        }
+        lists.add(models);
+        return lists;
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {

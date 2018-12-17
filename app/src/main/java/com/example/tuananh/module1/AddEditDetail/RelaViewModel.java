@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import com.example.tuananh.module1.BR;
 import com.example.tuananh.module1.DatabaseHandle;
 import com.example.tuananh.module1.Model.Model;
+import com.example.tuananh.module1.Model.PeopleSearch;
 import com.example.tuananh.module1.Model.Relationship;
 import com.example.tuananh.module1.R;
 import com.example.tuananh.module1.databinding.LayoutPeopleSelectBinding;
@@ -144,7 +145,7 @@ public class RelaViewModel extends BaseObservable {
     }
 
     @BindingAdapter({"mode","onDataHandle"})
-    public static void setLayout(FrameLayout view, int mode,OnDataHandle onDataHandle){
+    public static void setLayout(FrameLayout view, final int mode, OnDataHandle onDataHandle){
         final Context context = view.getContext();
         view.removeAllViewsInLayout();
         if (mode==0){
@@ -157,6 +158,7 @@ public class RelaViewModel extends BaseObservable {
             view.addView(relationshipSelect);
         }
         else if (mode==1){
+            final PeopleSearch peopleSearch = new PeopleSearch(context);
             view.setVisibility(View.VISIBLE);
             View peopleSelect = LayoutInflater.from(context).inflate(R.layout.layout_people_select,null,false);
             peopleSelect.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -172,13 +174,7 @@ public class RelaViewModel extends BaseObservable {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     models.clear();
-                    for (Model m : fromDb){
-                        if (m.getName().toLowerCase().contains(charSequence.toString().toLowerCase())){
-                            if (models.size()<5){
-                                models.add(m);
-                            }
-                        }
-                    }
+                    models.addAll(peopleSearch.onSearchListener(charSequence.toString(),5));
                     peopleSearchAdapter.notifyDataSetChanged();
                 }
 

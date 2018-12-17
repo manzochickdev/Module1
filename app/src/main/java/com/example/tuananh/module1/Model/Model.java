@@ -1,5 +1,8 @@
 package com.example.tuananh.module1.Model;
 
+import android.graphics.Bitmap;
+
+import java.io.File;
 import java.io.Serializable;
 import java.util.Calendar;
 

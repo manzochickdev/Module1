@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".AddEditDetail.ImagePickerFragment"
+        android:orientation="vertical"
+        android:background="@android:color/transparent">
+
+        <LinearLayout
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:background="@drawable/curved_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/btnCamera"
+                android:text="Pick From Camera"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <View
+                android:background="@android:color/black"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"></View>
+            <TextView
+                android:id="@+id/btnGallery"
+                android:text="Pick From Gallery"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <View
+                android:background="@android:color/black"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"></View>
+            <TextView
+                android:id="@+id/btnStorage"
+                android:text="Pick From Storage"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btnCancel"
+            android:layout_margin="8dp"
+            android:background="@drawable/curved_white"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="Cancel"
+            android:textSize="16sp"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</layout>

@@ -34,5 +34,6 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
         intent.putExtra("mode","view");
         intent.putExtra("id",id);
         startActivity(intent);
+
     }
 }
