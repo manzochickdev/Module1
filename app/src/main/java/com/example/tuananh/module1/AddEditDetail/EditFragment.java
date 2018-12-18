@@ -203,7 +203,7 @@ public class EditFragment extends Fragment {
         RelationshipAdapter relationshipAdapter;
         ArrayList<ModelRela> modelRelas;
         private void handleLayoutRelationship(View view) {
-            LayoutRelationshipBinding layoutRelationship = DataBindingUtil.bind(view);
+            final LayoutRelationshipBinding layoutRelationship = DataBindingUtil.bind(view);
             modelRelas = new ArrayList<>();
             modelRelas.addAll(input);
             if (modelRelas==null){
@@ -220,6 +220,12 @@ public class EditFragment extends Fragment {
                 public void cancelAddRelationship(int position) {
                     modelRelas.set(position,new ModelRela());
                     relationshipAdapter.notifyItemChanged(position);
+                }
+
+                @Override
+                public void onRelationshipManipulation(int mode, RelaViewModel.OnDataHandle onDataHandle) {
+                    layoutRelationship.setMode(mode);
+                    layoutRelationship.setOnDataHandle(onDataHandle);
                 }
 
                 @Override

@@ -15,10 +15,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tuananh.module1.DataBinding;
 import com.example.tuananh.module1.DatabaseHandle;
 import com.example.tuananh.module1.Model.Model;
 import com.example.tuananh.module1.R;
 import com.example.tuananh.module1.databinding.FragmentAddBinding;
+import com.example.tuananh.module1.databinding.LayoutRelationshipBinding;
 
 import java.util.ArrayList;
 
@@ -98,6 +100,7 @@ public class AddFragment extends Fragment {
         OnDataHandle onDataHandle = new OnDataHandle() {
             @Override
             public void addNewRelationship() {
+                fragmentAddBinding.layoutRelationship.relationshipHandleContainer.removeAllViewsInLayout();
                 modelRelas.add(new ModelRela());
                 relationshipAdapter.notifyItemInserted(modelRelas.size()-1);
             }
@@ -106,6 +109,12 @@ public class AddFragment extends Fragment {
             public void cancelAddRelationship(int position) {
                 modelRelas.set(position,new ModelRela());
                 relationshipAdapter.notifyItemChanged(position);
+            }
+
+            @Override
+            public void onRelationshipManipulation(int mode, RelaViewModel.OnDataHandle onDataHandle) {
+                fragmentAddBinding.layoutRelationship.setMode(mode);
+                fragmentAddBinding.layoutRelationship.setOnDataHandle(onDataHandle);
             }
 
             @Override

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"></import>
         <variable
@@ -65,14 +65,7 @@
                             android:src="@drawable/ic_remove_black_24dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
-
                     </RelativeLayout>
-                    <FrameLayout
-                        mode="@{viewModel.mode}"
-                        onDataHandle="@{viewModel.onHandler}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                    </FrameLayout>
                     <LinearLayout
                         android:visibility="@{viewModel.mode!=2 ? View.VISIBLE : View.GONE}"
                         android:layout_gravity="right"
@@ -83,32 +76,36 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <TextView
+                            android:gravity="center"
+                            android:textColor="@color/colorAccent"
+                            android:padding="4dp"
+                            android:background="@drawable/curved_rect"
                             android:onClick="@{()->viewModel.handleFinish(0)}"
                             android:id="@+id/tv_cancel"
                             android:text="Cancel"
-                            android:layout_width="wrap_content"
+                            android:layout_width="60dp"
                             android:layout_height="wrap_content" />
                         <TextView
+                            android:textColor="@android:color/white"
+                            android:gravity="center"
+                            android:padding="4dp"
+                            android:background="@drawable/curved_accent"
                             android:onClick="@{()->viewModel.handleFinish(1)}"
                             android:id="@+id/tv_ok"
                             android:layout_marginLeft="12dp"
                             android:text="OK"
-                            android:layout_width="wrap_content"
+                            android:layout_width="60dp"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
                 </LinearLayout>
-                <TextView
+                <ImageView
                     android:onClick="@{()->viewModel.addModelRela()}"
                     android:visibility="@{!viewModel.visible ? View.VISIBLE : View.GONE}"
                     android:id="@+id/btn_add"
-                    android:layout_margin="4dp"
-                    android:textSize="18sp"
-                    android:padding="8dp"
-                    android:gravity="center"
-                    android:textColor="@color/colorAccent"
-                    android:text="+ Add Relative"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </RelativeLayout>
