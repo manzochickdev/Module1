@@ -19,12 +19,14 @@ class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapter.ViewH
     Context context;
     OnDataHandle onDataHandle;
     Boolean isEdit=false;
+    String manipulation;
 
-    public RelationshipAdapter(ArrayList<ModelRela> modelRelas, Context context, OnDataHandle onDataHandle) {
+    public RelationshipAdapter(ArrayList<ModelRela> modelRelas, Context context, OnDataHandle onDataHandle,String manipulation) {
         this.modelRelas = modelRelas;
         this.root = modelRelas;
         this.context = context;
         this.onDataHandle = onDataHandle;
+        this.manipulation = manipulation;
     }
 
     @NonNull
@@ -35,8 +37,8 @@ class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapter.ViewH
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
-        viewHolder.layoutRelationshipItemBinding.setViewModel(new RelaViewModel(modelRelas.get(i),onDataHandle,i,isEdit));
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        viewHolder.layoutRelationshipItemBinding.setViewModel(new RelaViewModel(modelRelas.get(i),onDataHandle,manipulation,isEdit));
         viewHolder.layoutRelationshipItemBinding.executePendingBindings();
     }
 

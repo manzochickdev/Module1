@@ -9,104 +9,63 @@
             name="viewModel"
             type="com.example.tuananh.module1.AddEditDetail.RelaViewModel"></variable>
     </data>
-    <RelativeLayout
+    <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp">
-        <android.support.v7.widget.CardView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:gravity="center"
+                android:visibility="@{viewModel.visible ? View.VISIBLE : View.INVISIBLE}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/curved_rect">
-                <LinearLayout
-                    android:visibility="@{viewModel.visible ? View.VISIBLE : View.GONE}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="4dp">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:clickable="@{viewModel.mode!=2}"
-                            android:onClick="@{()->viewModel.onModeChange(1)}"
-                            android:id="@+id/iv_profile"
-                            android:layout_marginRight="12dp"
-                            android:layout_alignParentRight="true"
-                            android:src="@mipmap/ic_launcher"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp" />
-                        <TextView
-                            android:layout_centerVertical="true"
-                            android:text="@{viewModel.modelRela.model.name}"
-                            android:id="@+id/tv_name"
-                            android:layout_toLeftOf="@id/iv_profile"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:clickable="@{viewModel.mode!=2}"
-                            android:onClick="@{()->viewModel.onModeChange(0)}"
-                            android:id="@+id/tv_relationship"
-                            android:layout_marginLeft="28dp"
-                            android:layout_centerVertical="true"
-                            android:padding="4dp"
-                            android:textColor="@android:color/white"
-                            android:background="@drawable/curved_accent"
-                            android:text="@{viewModel.modelRela.relationship != null ? viewModel.modelRela.relationship : @string/relationshipHolder}"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <ImageView
-                            android:onClick="@{()->viewModel.handleRemove()}"
-                            android:visibility="@{viewModel.edit ? View.VISIBLE : View.GONE}"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/ic_remove_black_24dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </RelativeLayout>
-                    <LinearLayout
-                        android:visibility="@{viewModel.mode!=2 ? View.VISIBLE : View.GONE}"
-                        android:layout_gravity="right"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:gravity="center"
-                            android:textColor="@color/colorAccent"
-                            android:padding="4dp"
-                            android:background="@drawable/curved_rect"
-                            android:onClick="@{()->viewModel.handleFinish(0)}"
-                            android:id="@+id/tv_cancel"
-                            android:text="Cancel"
-                            android:layout_width="60dp"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:textColor="@android:color/white"
-                            android:gravity="center"
-                            android:padding="4dp"
-                            android:background="@drawable/curved_accent"
-                            android:onClick="@{()->viewModel.handleFinish(1)}"
-                            android:id="@+id/tv_ok"
-                            android:layout_marginLeft="12dp"
-                            android:text="OK"
-                            android:layout_width="60dp"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                </LinearLayout>
-                <ImageView
-                    android:onClick="@{()->viewModel.addModelRela()}"
-                    android:visibility="@{!viewModel.visible ? View.VISIBLE : View.GONE}"
-                    android:id="@+id/btn_add"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_add_circle_outline_black_24dp"
+                android:padding="4dp">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/iv_profile"
+                    android:src="@mipmap/ic_launcher"
                     android:layout_width="60dp"
                     android:layout_height="60dp" />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-    </RelativeLayout>
+                <TextView
+                    android:gravity="center"
+                    android:text="@{viewModel.modelRela.model.name}"
+                    android:id="@+id/tv_name"
+                    android:layout_below="@id/iv_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="12sp"
+                    android:id="@+id/tv_relationship"
+                    android:layout_below="@id/tv_name"
+                    android:padding="4dp"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/curved_accent"
+                    android:text="@{viewModel.modelRela.relationship != null ? viewModel.modelRela.relationship : @string/relationshipHolder}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_marginLeft="-8dp"
+                    android:onClick="@{()->viewModel.handleRemove()}"
+                    android:visibility="@{viewModel.edit ? View.VISIBLE : View.GONE}"
+                    android:layout_toRightOf="@id/iv_profile"
+                    android:src="@drawable/ic_remove_black_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <ImageView
+                android:onClick="@{()->viewModel.addModelRela()}"
+                android:visibility="@{!viewModel.visible ? View.VISIBLE : View.GONE}"
+                android:id="@+id/btn_add"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_add_circle_outline_black_24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+    </android.support.v7.widget.CardView>
 </layout>

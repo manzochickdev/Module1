@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ public class AddFragment extends Fragment {
     FragmentAddBinding fragmentAddBinding;
     int id;
     Boolean isImageProfileChange = false;
+    Context context;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class AddFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragmentAddBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_add, container, false);
+        context = getContext();
         handleInfoLayout();
         handleRelationshipLayout();
         fragmentAddBinding.tvOk.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +59,7 @@ public class AddFragment extends Fragment {
                 if (isImageProfileChange){
                     bitmap =((BitmapDrawable) fragmentAddBinding.ivProfile.getDrawable()).getBitmap();
                 }
-                IMain2Activity iMain2Activity = (IMain2Activity) getContext();
+                IMain2Activity iMain2Activity = (IMain2Activity) context;
                 iMain2Activity.onDataBack(name,modelRelas,bitmap);
             }
         });
@@ -93,7 +96,7 @@ public class AddFragment extends Fragment {
     private void handleRelationshipLayout() {
         final ArrayList<ModelRela> modelRelas = new ArrayList<>();
         if (id!=-1){
-            Model model = DatabaseHandle.getInstance(getContext()).getPerson(id);
+            Model model = DatabaseHandle.getInstance(context).getPerson(id);
             modelRelas.add(new ModelRela(model));
         }
         else modelRelas.add(new ModelRela());
@@ -106,14 +109,14 @@ public class AddFragment extends Fragment {
             }
 
             @Override
-            public void cancelAddRelationship(int position) {
+            public void cancelAddRelationship() {
+                int position = modelRelas.size()-1;
                 modelRelas.set(position,new ModelRela());
                 relationshipAdapter.notifyItemChanged(position);
             }
 
             @Override
-            public void onRelationshipManipulation(int mode, RelaViewModel.OnDataHandle onDataHandle) {
-                fragmentAddBinding.layoutRelationship.setMode(mode);
+            public void onRelationshipManipulation(RelaViewModel.OnDataHandle onDataHandle) {
                 fragmentAddBinding.layoutRelationship.setOnDataHandle(onDataHandle);
             }
 
@@ -131,9 +134,10 @@ public class AddFragment extends Fragment {
                 relationshipAdapter.notifyItemRemoved(pos);
             }
         };
-        relationshipAdapter = new RelationshipAdapter(modelRelas,getContext(),onDataHandle);
+        relationshipAdapter = new RelationshipAdapter(modelRelas,context,onDataHandle,"add");
         fragmentAddBinding.layoutRelationship.rvRelationship.setAdapter(relationshipAdapter);
-        fragmentAddBinding.layoutRelationship.rvRelationship.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(context,4,LinearLayoutManager.VERTICAL,false);
+        fragmentAddBinding.layoutRelationship.rvRelationship.setLayoutManager(gridLayoutManager);
     }
 
     private void handleInfoLayout() {

@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -217,14 +218,14 @@ public class EditFragment extends Fragment {
                 }
 
                 @Override
-                public void cancelAddRelationship(int position) {
+                public void cancelAddRelationship() {
+                    int position = modelRelas.size()-1;
                     modelRelas.set(position,new ModelRela());
                     relationshipAdapter.notifyItemChanged(position);
                 }
 
                 @Override
-                public void onRelationshipManipulation(int mode, RelaViewModel.OnDataHandle onDataHandle) {
-                    layoutRelationship.setMode(mode);
+                public void onRelationshipManipulation(RelaViewModel.OnDataHandle onDataHandle) {
                     layoutRelationship.setOnDataHandle(onDataHandle);
                 }
 
@@ -243,9 +244,10 @@ public class EditFragment extends Fragment {
                     //databaseHandle.removeRelative(id,position);
                 }
             };
-            relationshipAdapter = new RelationshipAdapter(modelRelas,context,onDataHandle);
+            relationshipAdapter = new RelationshipAdapter(modelRelas,context,onDataHandle,"edit");
             layoutRelationship.rvRelationship.setAdapter(relationshipAdapter);
-            layoutRelationship.rvRelationship.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(context,4,LinearLayoutManager.VERTICAL,false);
+            layoutRelationship.rvRelationship.setLayoutManager(gridLayoutManager);
         }
 
         @Override

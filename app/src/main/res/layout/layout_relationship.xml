@@ -2,9 +2,6 @@
 <layout>
     <data>
         <variable
-            name="mode"
-            type="Integer"></variable>
-        <variable
             name="onDataHandle"
             type="com.example.tuananh.module1.AddEditDetail.RelaViewModel.OnDataHandle"></variable>
     </data>
@@ -15,13 +12,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/rvRelationship"></android.support.v7.widget.RecyclerView>
-        <FrameLayout
+        <LinearLayout
             android:id="@+id/relationship_handle_container"
             android:layout_below="@id/rvRelationship"
-            mode="@{mode}"
-            onDataHandle="@{onDataHandle}"
+            setLayout="@{onDataHandle}"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></FrameLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"></LinearLayout>
 
     </RelativeLayout>
 </layout>
