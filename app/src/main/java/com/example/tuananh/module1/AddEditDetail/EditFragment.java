@@ -31,6 +31,8 @@ import com.example.tuananh.module1.R;
 import com.example.tuananh.module1.databinding.FragmentEditBinding;
 import com.example.tuananh.module1.databinding.LayoutInfoBinding;
 import com.example.tuananh.module1.databinding.LayoutRelationshipBinding;
+import com.example.tuananh.module2.ModelAddress;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -129,6 +131,12 @@ public class EditFragment extends Fragment {
         isImageProfileChange = true;
     }
 
+    public void setAddress(String address, LatLng latlng) {
+        View view1 = customPagerAdapter.onViewBack(0);
+        LayoutInfoBinding layoutInfoBinding = DataBindingUtil.bind(view1);
+        layoutInfoBinding.tvAddress.setText(address);
+    }
+
 
     private void handleMode(boolean b) {
         fragmentEditBinding.ivProfile.setEnabled(b);
@@ -142,6 +150,7 @@ public class EditFragment extends Fragment {
         layoutInfoBinding.setIsEdit(b);
         fragmentEditBinding.setVisible(!b);
     }
+
 
 
     protected class CustomPagerAdapter extends PagerAdapter{
@@ -198,7 +207,13 @@ public class EditFragment extends Fragment {
             LayoutInfoBinding layoutInfoBinding = DataBindingUtil.bind(view);
             layoutInfoBinding.setIsEdit(isEdit);
             String name = databaseHandle.getName(id);
+            //todo chuyen sang binding data
+            ModelAddress modelAddress = databaseHandle.getAddress(id);
             layoutInfoBinding.etName.setText(name);
+            if (modelAddress != null) {
+                layoutInfoBinding.tvAddress.setText(modelAddress.address);
+            }
+            layoutInfoBinding.setIMain2Activity((IMain2Activity) context);
         }
 
         RelationshipAdapter relationshipAdapter;

@@ -8,7 +8,9 @@ import android.util.Log;
 
 import com.example.tuananh.module1.AddEditDetail.ModelRela;
 import com.example.tuananh.module1.Model.Model;
+import com.example.tuananh.module1.Model.ModelAddress;
 import com.example.tuananh.module1.Model.Relationship;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -121,41 +123,41 @@ public class DatabaseHandle extends SQLiteOpenHelper {
         }
         else return null;
     }
-//
-//    public void addAddress(int id,ModelAddress address){
-//        String q = "insert into address values ("+id+","+address.latLng.latitude+","+address.latLng.longitude+",'"+address.address+"');";
-//        SQLiteDatabase db = getWritableDatabase();
-//        db.execSQL(q);
-//    }
 
-//    public ModelAddress getAddress(int id){
-//        SQLiteDatabase db = getReadableDatabase();
-//        String q = "select * from address where main_id = "+id+";";
-//        Cursor c = db.rawQuery(q,null);
-//        while(c.moveToNext()){
-//            double latitude = c.getDouble(c.getColumnIndex("latitude"));
-//            double longitude = c.getDouble(c.getColumnIndex("longitude"));
-//            String mAddress = c.getString(c.getColumnIndex("mAddress"));
-//            ModelAddress address = new ModelAddress(new LatLng(latitude,longitude),mAddress);
-//            return address;
-//        }
-//        return null;
-//    }
+    public void addAddress(int id,ModelAddress address){
+        String q = "insert into address values ("+id+","+address.latLng.latitude+","+address.latLng.longitude+",'"+address.address+"');";
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(q);
+    }
 
-//    public ArrayList<ModelAddress> getAllAddress(){
-//        SQLiteDatabase db = getReadableDatabase();
-//        ArrayList<ModelAddress> modelAddresses = new ArrayList<>();
-//        String q = "select * from address";
-//        Cursor c = db.rawQuery(q,null);
-//        while(c.moveToNext()){
-//            int id = c.getInt(c.getColumnIndex("main_id"));
-//            double latitude = c.getDouble(c.getColumnIndex("latitude"));
-//            double longitude = c.getDouble(c.getColumnIndex("longitude"));
-//            String mAddress = c.getString(c.getColumnIndex("mAddress"));
-//            modelAddresses.add(new ModelAddress(id,new LatLng(latitude,longitude),mAddress));
-//        }
-//        return modelAddresses;
-//    }
+    public ModelAddress getAddress(int id){
+        SQLiteDatabase db = getReadableDatabase();
+        String q = "select * from address where main_id = "+id+";";
+        Cursor c = db.rawQuery(q,null);
+        while(c.moveToNext()){
+            double latitude = c.getDouble(c.getColumnIndex("latitude"));
+            double longitude = c.getDouble(c.getColumnIndex("longitude"));
+            String mAddress = c.getString(c.getColumnIndex("mAddress"));
+            ModelAddress address = new ModelAddress(mAddress,new LatLng(latitude,longitude));
+            return address;
+        }
+        return null;
+    }
+
+    public ArrayList<ModelAddress> getAllAddress(){
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<ModelAddress> modelAddresses = new ArrayList<>();
+        String q = "select * from address";
+        Cursor c = db.rawQuery(q,null);
+        while(c.moveToNext()){
+            int id = c.getInt(c.getColumnIndex("main_id"));
+            double latitude = c.getDouble(c.getColumnIndex("latitude"));
+            double longitude = c.getDouble(c.getColumnIndex("longitude"));
+            String mAddress = c.getString(c.getColumnIndex("mAddress"));
+            modelAddresses.add(new ModelAddress(id,new LatLng(latitude,longitude),mAddress));
+        }
+        return modelAddresses;
+    }
 
     public String getName(int id){
         SQLiteDatabase db = getReadableDatabase();

@@ -1,16 +1,21 @@
 package com.example.tuananh.module1.AddEditDetail;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.example.tuananh.module1.DatabaseHandle;
+import com.example.tuananh.module1.Map.Main3Activity;
 import com.example.tuananh.module1.Model.Model;
+import com.example.tuananh.module1.Model.ModelAddress;
 import com.example.tuananh.module1.Model.Relationship;
 import com.example.tuananh.module1.R;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,13 +25,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main2Activity extends AppCompatActivity implements IMain2Activity {
+    String mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        String mode = getIntent().getStringExtra("mode");
+        mode = getIntent().getStringExtra("mode");
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (mode.equals("add")){
             AddFragment addFragment = new AddFragment();
@@ -61,14 +67,16 @@ public class Main2Activity extends AppCompatActivity implements IMain2Activity {
     }
 
     @Override
-    public void onDataBack(String name, ArrayList<ModelRela> modelRela,Bitmap bitmap) {
+    public void onDataBack(String name, ArrayList<ModelRela> modelRela, Bitmap bitmap, ModelAddress modelAddress) {
         if (name!=null && !name.equals("")){
             Model model = new Model(Model.createId(),name);
-            DatabaseHandle.getInstance(getBaseContext()).addPeople(model);
+            DatabaseHandle databaseHandle = DatabaseHandle.getInstance(getBaseContext());
+            databaseHandle.addPeople(model);
+            databaseHandle.addAddress(model.getId(),modelAddress);
             if (modelRela!=null){
                 for (ModelRela m : modelRela){
                     if (m.relationship!=null && m.model!=null){
-                        DatabaseHandle.getInstance(getBaseContext()).addRelative(model,m.model, Relationship.convertRelationship(m.relationship));
+                        databaseHandle.addRelative(model,m.model, Relationship.convertRelationship(m.relationship));
                     }
                 }
             }
@@ -132,4 +140,30 @@ public class Main2Activity extends AppCompatActivity implements IMain2Activity {
         onBackPressed();
     }
 
+    @Override
+    public void onPickAddress() {
+
+        Intent intent = new Intent(getBaseContext(), Main3Activity.class);
+        intent.putExtra("mode","pick");
+        startActivityForResult(intent,11335);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data!=null){
+            switch (requestCode){
+                case 11335 :
+                    if (mode.equals("add") || mode.equals("addNew")){
+                        AddFragment addFragment = (AddFragment) getSupportFragmentManager().findFragmentByTag("AddFragment");
+                        addFragment.setAddress(data.getStringExtra("address"),new LatLng(data.getDoubleExtra("latitude",0),data.getDoubleExtra("longitude",0)));
+                    }
+                    else {
+                        EditFragment editFragment = (EditFragment) getSupportFragmentManager().findFragmentByTag("EditFragment");
+                        editFragment.setAddress(data.getStringExtra("address"),new LatLng(data.getDoubleExtra("latitude",0),data.getDoubleExtra("longitude",0)));
+                    }
+                    break;
+            }
+        }
+    }
 }

@@ -4,6 +4,9 @@
         <variable
             name="isEdit"
             type="Boolean"></variable>
+        <variable
+            name="iMain2Activity"
+            type="com.example.tuananh.module1.AddEditDetail.IMain2Activity"></variable>
     </data>
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -79,6 +82,9 @@
                             android:layout_height="wrap_content" />
                     </android.support.design.widget.TextInputLayout>
                     <ImageView
+                        android:enabled="@{isEdit}"
+                        android:onClick="@{()-> iMain2Activity.onPickAddress()}"
+                        android:id="@+id/iv_picker"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
                         android:src="@drawable/ic_add_location_black_24dp"

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainFragment">
+
+        <!-- TODO: update1 -->
+        <fragment
+            android:name="com.example.tuananh.module2.Map.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mapFragment"></fragment>
+        <fragment
+            android:name="com.example.tuananh.module2.MapManipulation.MapManipulationFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/mapManipulationFragment"></fragment>
+        <FrameLayout
+            android:id="@+id/bottom_container"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </FrameLayout>
+
+    </FrameLayout>
+</layout>

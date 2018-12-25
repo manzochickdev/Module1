@@ -1,8 +1,12 @@
 package com.example.tuananh.module1;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,5 +27,13 @@ public class DataBinding {
                 e.printStackTrace();
             }
         }
+    }
+
+    @BindingAdapter("setFont")
+    public static void setFont(TextView view, Context context){
+        AssetManager assetManager = context.getAssets();
+        Typeface typeface = Typeface.createFromAsset(assetManager,"Font/icon.ttf");
+        view.setTypeface(typeface);
+
     }
 }

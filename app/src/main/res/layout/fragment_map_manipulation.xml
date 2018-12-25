@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View"></import>
+        <variable
+            name="viewHandle"
+            type="com.example.tuananh.module1.Map.MapManipulation.ViewHandle"></variable>
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MapView.MapManipulationFragment"
+        android:orientation="vertical"
+        android:background="@android:color/white">
+
+        <!-- TODO: Update blank fragment layout -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent">
+            <LinearLayout
+                android:id="@+id/layout_handle"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:weightSum="4">
+                <TextView
+                    android:onClick="@{()->viewHandle.onModeChange(0)}"
+                    android:textColor="@{viewHandle.mode==0 ? @android:color/white : @color/colorUnselected}"
+                    android:textSize="24sp"
+                    setFont="@{viewHandle.context}"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text=""/>
+                <TextView
+                    android:textColor="@{viewHandle.mode==1 ? @android:color/white : @color/colorUnselected}"
+                    android:onClick="@{()->viewHandle.onModeChange(1)}"
+                    android:textSize="24sp"
+                    setFont="@{viewHandle.context}"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text=""/>
+                <TextView
+                    android:textColor="@{viewHandle.mode==2 ? @android:color/white : @color/colorUnselected}"
+                    android:onClick="@{()->viewHandle.onModeChange(2)}"
+                    android:textSize="24sp"
+                    setFont="@{viewHandle.context}"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text=""/>
+                <TextView
+                    android:textColor="@{viewHandle.mode==3 ? @android:color/white : @color/colorUnselected}"
+                    android:onClick="@{()->viewHandle.onModeChange(3)}"
+                    android:textSize="24sp"
+                    setFont="@{viewHandle.context}"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text=""/>
+            </LinearLayout>
+            <FrameLayout
+                android:id="@+id/frag_container"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_below="@id/layout_handle"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:background="@drawable/curved_white"></FrameLayout>
+        </RelativeLayout>
+        <FrameLayout
+            android:id="@+id/frag_container1"
+            android:visibility="@{!viewHandle.search ? View.GONE : View.VISIBLE}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </FrameLayout>
+
+    </LinearLayout>
+</layout>

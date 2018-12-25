@@ -19,9 +19,10 @@ import android.view.ViewGroup;
 import com.example.tuananh.module1.DataBinding;
 import com.example.tuananh.module1.DatabaseHandle;
 import com.example.tuananh.module1.Model.Model;
+import com.example.tuananh.module1.Model.ModelAddress;
 import com.example.tuananh.module1.R;
-import com.example.tuananh.module1.databinding.FragmentAddBinding;
-import com.example.tuananh.module1.databinding.LayoutRelationshipBinding;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -31,6 +32,7 @@ public class AddFragment extends Fragment {
     int id;
     Boolean isImageProfileChange = false;
     Context context;
+    ModelAddress modelAddress;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public class AddFragment extends Fragment {
                     bitmap =((BitmapDrawable) fragmentAddBinding.ivProfile.getDrawable()).getBitmap();
                 }
                 IMain2Activity iMain2Activity = (IMain2Activity) context;
-                iMain2Activity.onDataBack(name,modelRelas,bitmap);
+                iMain2Activity.onDataBack(name,modelRelas,bitmap,modelAddress);
             }
         });
         fragmentAddBinding.ivProfile.setOnClickListener(new View.OnClickListener() {
@@ -74,16 +76,6 @@ public class AddFragment extends Fragment {
 
             }
         });
-//        fragmentAddBinding.btnOk.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String name = fragmentAddBinding.layoutInfo.etName.getText().toString();
-//                RelationshipAdapter adapter = (RelationshipAdapter) fragmentAddBinding.layoutRelationship.rvRelationship.getAdapter();
-//                ArrayList<ModelRela> modelRelas = adapter.getItemList();
-//                IMain2Activity iMain2Activity = (IMain2Activity) getContext();
-//                iMain2Activity.onDataBack(name,modelRelas);
-//            }
-//        });
         return fragmentAddBinding.getRoot();
     }
 
@@ -91,6 +83,12 @@ public class AddFragment extends Fragment {
         fragmentAddBinding.ivProfile.setImageBitmap(image);
         isImageProfileChange = true;
     }
+
+    public void setAddress(String address, LatLng latlng) {
+        modelAddress = new ModelAddress(address,latlng);
+        fragmentAddBinding.layoutInfo.tvAddress.setText(address);
+    }
+
 
     RelationshipAdapter relationshipAdapter;
     private void handleRelationshipLayout() {
@@ -142,6 +140,7 @@ public class AddFragment extends Fragment {
 
     private void handleInfoLayout() {
         fragmentAddBinding.layoutInfo.setIsEdit(true);
+        fragmentAddBinding.layoutInfo.setIMain2Activity((IMain2Activity) context);
     }
 
 }
